@@ -7,7 +7,7 @@ import { ApiService } from '../api.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-  data: any = { rates: { PLN: '', EUR: '', UAH: '' } }; // sorry for this "any", i realy want to optimize header.component.ts.(so added getConvertedValue). I added index signature, interface, but TS still got errors
+  data: any = { rates: { PLN: '', EUR: '', UAH: '' } };
   baseUah = 0;
 
   constructor(private apiService: ApiService) {}

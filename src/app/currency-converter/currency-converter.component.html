@@ -1,31 +1,46 @@
-<div>
-    <h2>CURRENCY CONVERTER</h2>
-    <div>
-      <label for="input1">  </label>
-      <input
-        id="input1"
-        [(ngModel)]="input1Value"
-        (input)="convertInput1()"
-      />
-      <select id="input1Currency" [(ngModel)]="input1Currency" (change)="convertInput1()">
-        <option value="UAH">UAH</option>
-        <option value="PLN">PLN</option>
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-      </select>
-    </div>
-    <div>
-      <label for="input2">  </label>
-      <input
-        id="input2"
-        [(ngModel)]="input2Value"
-        (input)="convertInput2()"
-      />
-      <select id="input2Currency" [(ngModel)]="input2Currency" (change)="convertInput2()">
-        <option value="UAH">UAH</option>
-        <option value="PLN">PLN</option>
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-      </select>
-    </div>
+<div class="currency-converter">
+  <h2>
+    <span style="display: block">CURRENCY</span>
+    <span style="display: block">CONVERTER</span>
+  </h2>
+
+  <div>
+    <label for="input1"></label>
+    <input
+      id="input1"
+      type="number"
+      [(ngModel)]="first"
+      (ngModelChange)="convertFirstToSecond()"
+      (click)="clearInputField($event)"
+    />
+    <select
+      id="input1Currency"
+      [(ngModel)]="currencyFrom"
+      (change)="convertFirstToSecond()"
+    >
+      <option *ngFor="let currency of currencies" [value]="currency">
+        {{ currency }} {{ symbols[currency] }}
+      </option>
+    </select>
   </div>
+
+  <div>
+    <label for="input2"></label>
+    <input
+      id="input2"
+      type="number"
+      (click)="clearInputField($event)"
+      [(ngModel)]="second"
+      (ngModelChange)="convertSecondToFirst()"
+    />
+    <select
+      id="input2Currency"
+      [(ngModel)]="currencyTo"
+      (change)="convertSecondToFirst()"
+    >
+      <option *ngFor="let currency of currencies" [value]="currency">
+        {{ currency }} {{ symbols[currency] }}
+      </option>
+    </select>
+  </div>
+</div>

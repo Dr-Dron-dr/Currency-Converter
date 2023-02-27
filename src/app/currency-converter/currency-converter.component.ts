@@ -1,17 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../api.service';
-
+import { ApiService, ApiInfo } from '../api.service';
+type CurrencySymbols = {
+  [key: string]: string;
+};
 @Component({
   selector: 'app-currency-converter',
   templateUrl: './currency-converter.component.html',
-  styleUrls: ['./currency-converter.component.css']
+  styleUrls: ['./currency-converter.component.css'],
 })
 export class CurrencyConverterComponent {
-  input1Value = 1;
-  input1Currency = 'USD';
-  input2Value = 1;
-  input2Currency = 'UAH';
-  data: any = { rates: { PLN: '', EUR: '', UAH: '', USD: 1 } };
+  hasInputFieldBeenClicked = false;
+  first = 0;
+  currencyFrom = 'USD';
+  second = 0;
+  currencyTo = 'UAH';
+  currencies = ['UAH', 'PLN', 'USD', 'EUR'];
+  symbols: CurrencySymbols = { EUR: '€', PLN: 'zł', USD: '$', UAH: '₴' };
+  data: ApiInfo = { rates: { PLN: 0, EUR: 0, UAH: 0, USD: 1 } };
 
   constructor(private apiService: ApiService) {}
 
@@ -21,17 +26,28 @@ export class CurrencyConverterComponent {
     });
   }
 
-  convertInput1() {
-    this.input2Value =
-      ((this.input1Value * 1) / this.data.rates[this.input1Currency]) *
-      this.data.rates[this.input2Currency];
-    this.input2Value = Number(this.input2Value.toFixed(2));
+  clearInputField(event: MouseEvent) {
+    if (!this.hasInputFieldBeenClicked) {
+      const target = event.target as HTMLInputElement;
+      if (target) {
+        target.value = '';
+        this.hasInputFieldBeenClicked = true;
+      }
+    }
   }
 
-  convertInput2() {
-    this.input1Value =
-      ((this.input2Value * 1) / this.data.rates[this.input2Currency]) *
-      this.data.rates[this.input1Currency];
-    this.input1Value = Number(this.input1Value.toFixed(2));
+  convert(currencyFrom: string, currencyTo: string, valueFrom: number): number {
+    const valueTo =
+      ((valueFrom * 1) / this.data.rates[currencyFrom]) *
+      this.data.rates[currencyTo];
+    return Number(valueTo.toFixed(2));
+  }
+
+  convertFirstToSecond() {
+    this.second = this.convert(this.currencyFrom, this.currencyTo, this.first);
+  }
+
+  convertSecondToFirst() {
+    this.first = this.convert(this.currencyTo, this.currencyFrom, this.second);
   }
 }

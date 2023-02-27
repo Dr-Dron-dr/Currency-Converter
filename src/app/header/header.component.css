@@ -1,24 +1,31 @@
-
-
 header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background-color: #444;
-    color: #fff;
-  }
-  
-  h1 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-right: 10px;
-  }
-  
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  padding: 20px;
+  background-color: #051747;
+  color: #fefefe;
 
-  span {
-    font-size: 20px;
-    font-weight: normal;
-  } 
+  border-radius: 5px;
+}
 
+p {
+  font-size: 40px;
+  font-weight: normal;
+  margin: 30px;
+  padding:10px;
+  color: #E7E9F0;
+  
+}
+
+span {
+  font-size: 40px;
+  font-weight: normal;
+}
+
+img {
+  margin-right: 10px;
+  margin-top: 10px;
+  border: 1px solid #000000;
+  width: 45px;
+}

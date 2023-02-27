@@ -1,5 +1,5 @@
 <header>
-    <h1>USD => {{ getConvertedValue('USD') }}</h1>
-    <h1>EUR => {{ getConvertedValue('EUR') }}</h1>
-    <h1>PLN => {{ getConvertedValue('PLN') }}</h1>
-  </header>
+  <p *ngFor="let currency of currencies" class="currency">
+    <img [src]="getImageLink(currency)" alt="{{ currency }}"/> <span>{{ currency }}</span> &rarr; <span>{{ getConvertedValue(currency) }} ₴</span>
+  </p>
+</header>

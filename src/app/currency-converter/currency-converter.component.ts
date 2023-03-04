@@ -1,29 +1,22 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { ApiService, ApiInfo } from '../api.service';
-
 type CurrencySymbols = {
   [key: string]: string;
 };
-
 @Component({
   selector: 'app-currency-converter',
   templateUrl: './currency-converter.component.html',
   styleUrls: ['./currency-converter.component.css'],
 })
-export class CurrencyConverterComponent implements OnInit {
+export class CurrencyConverterComponent {
+  hasInputFieldBeenClicked = false;
+  first = 0;
+  currencyFrom = 'USD';
+  second = 0;
+  currencyTo = 'UAH';
   currencies = ['UAH', 'PLN', 'USD', 'EUR'];
   symbols: CurrencySymbols = { EUR: '€', PLN: 'zł', USD: '$', UAH: '₴' };
   data: ApiInfo = { rates: { PLN: 0, EUR: 0, UAH: 0, USD: 1 } };
-  clearInputFieldEvent = new EventEmitter<void>();
-  clearInputFieldCalled = false;
-
-  currencyConverterForm = new FormGroup({
-    first: new FormControl(0),
-    currencyFrom: new FormControl('USD'),
-    second: new FormControl(0),
-    currencyTo: new FormControl('UAH'),
-  });
 
   constructor(private apiService: ApiService) {}
 
@@ -31,16 +24,16 @@ export class CurrencyConverterComponent implements OnInit {
     this.apiService.fetchData().then((data) => {
       this.data = data;
     });
+  }
 
-    this.clearInputFieldEvent.subscribe(() => {
-      if (!this.clearInputFieldCalled) {
-        const inputField = document.querySelector(
-          '.currency-converter-form__input'
-        ) as HTMLInputElement;
-        inputField.value = '';
-        this.clearInputFieldCalled = true;
+  clearInputField(event: MouseEvent) {
+    if (!this.hasInputFieldBeenClicked) {
+      const target = event.target as HTMLInputElement;
+      if (target) {
+        target.value = '';
+        this.hasInputFieldBeenClicked = true;
       }
-    });
+    }
   }
 
   convert(currencyFrom: string, currencyTo: string, valueFrom: number): number {
@@ -51,30 +44,10 @@ export class CurrencyConverterComponent implements OnInit {
   }
 
   convertFirstToSecond() {
-    const firstValue = this.currencyConverterForm.value.first;
-    const currencyFromValue = this.currencyConverterForm.value.currencyFrom;
-    const currencyToValue = this.currencyConverterForm.value.currencyTo;
-
-    if (currencyFromValue && currencyToValue && firstValue) {
-      this.currencyConverterForm.patchValue({
-        second: this.convert(currencyFromValue, currencyToValue, firstValue),
-      });
-    }
+    this.second = this.convert(this.currencyFrom, this.currencyTo, this.first);
   }
 
   convertSecondToFirst() {
-    const secondValue = this.currencyConverterForm.value.second;
-    const currencyFromValue = this.currencyConverterForm.value.currencyFrom;
-    const currencyToValue = this.currencyConverterForm.value.currencyTo;
-    if (currencyFromValue && currencyToValue && secondValue) {
-      this.currencyConverterForm.patchValue({
-        first: this.convert(currencyToValue, currencyFromValue, secondValue),
-      });
-    }
-  }
-
-  clearInputField(event: Event) {
-    this.clearInputFieldEvent.emit();
+    this.first = this.convert(this.currencyTo, this.currencyFrom, this.second);
   }
 }
-
